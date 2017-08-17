@@ -1,0 +1,33 @@
+[testing]
+serviceUrl = @SERVICE_URL@
+nginxUrl = @NGINX_URL@
+nginxHost = @NGINX_HOST@
+nginxPass = @NGINX_PASS@
+beaconServer = @BEACON_SERVER@
+partnerId = -6
+secret = @PLAY_PARTNER_ADMIN_SECRET@
+timeout = 90
+scaleTestInvokers = 10
+verifySSL = false
+transcodedFlavorId = @FLAVOR_ID@
+sourceFlavorId = @FLAVOR_ID@
+resourcesPath = @PLAY_SERVER_BASE_DIR@/tests/resources
+outputPath = @PLAY_SERVER_BASE_DIR@/tests/output
+testsPath = @PLAY_SERVER_BASE_DIR@/tests/integrationTests
+impersonatePartnerId = @PARTNER_ID@
+uiConfId = @UI_CONF_ID@
+shouldDeleteEntriesAfterTest = @shouldDeleteEntriesAfterTest@
+
+
+[fileUtils]
+dirPath = @DIR_PATH@
+filePath = @FILE_PATH@
+day = @DAY@
+month = @MONTH_0_TO_11@
+year = @YEAR@
+prefix = @PREFIX@
+suffix = @SUFFIX@
+
+[testing][singleCuePoint]
+iterations = 2000
+intervalInMili = 60000

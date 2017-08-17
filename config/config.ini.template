@@ -1,10 +1,10 @@
-
 [client]
 serviceUrl = @SERVICE_URL@
 partnerId = -6
 secret = @PLAY_PARTNER_ADMIN_SECRET@
 timeout = 90
 verifySSL = false
+ksExpiryTime=86000
 
 [cloud]
 domain = @CLOUD_HOSTNAME@
@@ -24,28 +24,34 @@ accessLogName = kaltura_play_access.log
 logName = kaltura_play.log
 errorLogName = kaltura_play_error.log
 largeDataDebugEnabled = 0
+convertLogDir = @CONVERT_LOG_DIR@
 
 [cache]
+type = @CACHE_TYPE@
 hackWowzaUniqueSession = 0
 adMedia = 1800
-adMediaExtension = 1800
-adHandled = 600
+sessionCuePoint = 1200
 cuePoint = 600
-uiConfConfig = 600
-
-entryHandled = 20
-cuePointWatcherHandled = 20
+watcherHandled = 20
 entryRequired = 300
 masterManifest = 600
 renditionManifest = 20
 encodingParams = 600
 elapsedTime = 600
-blackHandled = 600
-blackMedia = 600
+fillerMedia = 600
 restoreableAction = 600
 serverProcess = 60
-
+trackingBeaconUrl = 10
 fileDownloadTimeout = 60
+lock = 10
+vodApiTimeout = 600
+layout = 600
+calcLayoutMili = 100
+errorAdBreakTTL = 10
+tinyUrlTtl = 3600
+fetchIdentifierLifetime = 60
+entryVersionTimeout = 86000
+sessionIdVersionTimeout = 10800
 
 [memcache]
 hostname = @MEMCACHE_HOST@
@@ -66,6 +72,36 @@ retry = 30000
 ;failOverServers = undefined, the ability use these servers as failover when the dead server get's removed from the consistent hashing scheme. This must be an array of servers confirm the server_locations specification.
 ;keyCompression = true, compress keys using md5 if they exceed the maxKeySize option.
 ;idle = 5000, the idle timeout for the connections.
+dataVersion = 0
+
+[filters]
+ratioWeightFactor = 150
+frameSizeWeightFactor = 90
+bitRateWeightFactor = 50
+
+
+[couchbase]
+clusterName = @CLUSTER_NAME@
+bucketName = @BUCKET_NAME@
+port = 8091
+dataVersion = 0
+touchEnabled = 1
+;for encryption of values edit the KEY and IV parameters
+;KEY =
+;IV =
+
+[udpsender]
+PORT = @UDP_SERVER_PORT@
+HOST = @UDP_SERVER_HOST@
 
 [bin]
 binDir = @PLAY_SERVER_BASE_DIR@/bin
+[bin][debug]
+enabled = false
+port = 6000
+
+[h264Verification]
+enabled = true
+logPath = @LOG_FILE_PATH@
+scriptsPath = @SCRIPTS_PATH@
+cacheTime = @CACHE_TIME@

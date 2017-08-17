@@ -2,6 +2,8 @@
 [manifest]
 ;domain = @MANIFEST_SERVICE_HOSTNAME@
 ;domainPort = 80
+[manifest][rendition]
+maxRetries = 6
 
 [stream]
 ;useCdn = 1
@@ -31,13 +33,29 @@ ffmpeg_max_processes=10
 ; domainPort = 80
 
 [adIntegration]
+preFetchWindow = 60000
 vastRequestTimeOut = 5
 durationCoefficient = 1
 calcMd5OnRedirect = 0
+adFileIdCalcMethod = BYTES
+adFileIdLimitBytes = 100000
 ;domain = @AD_INTEGRATION_SERVICE_HOSTNAME@
 ; domainPort = 80
 
-[system]
+[layout]
+;domain = @LAYOUT_SERVICE_HOSTNAME@
+fillerDefaultDurationSecs = 10
+secondsBackwardsAfterAd = 2
+millisBetweenInnerFetchAndLayout = 3000
+millisAdBreakRetryTimeout = 1000
 
+[fetch]
+;domain = @LAYOUT_SERVICE_HOSTNAME@
+durationCoefficient = 1
+vastRequestTimeout = 10
+[cleanUp]
+
+[system]
+[tracking]
 [testAdServer]
 ;vastUrls

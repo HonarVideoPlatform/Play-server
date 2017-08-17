@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<project name="KalturaPlayServer" default="install">
+
+	<property name="bin.dir" value="${basedir}/bin" />
+	<property name="native.dir" value="${basedir}/native" />
+
+	<target name="install" depends="extract-ffmpeg, install-TsId3Reader-plugin, build-TsPreparer-plugin, build-TsStitcher-plugin, download-vast-client-js, play-server-service, replace-Config-file-tokens">
+		<exec dir="${basedir}" executable="npm" failonerror="true">
+			<arg value="install" />
+		</exec>
+	</target>
+
+	<target name="extract-ffmpeg">
+		<symlink action="delete" link="${bin.dir}/ffmpeg"/>
+		<symlink action="delete" link="${bin.dir}/ffprobe"/>
+		<gunzip src="${bin.dir}/ffmpeg-2.1.3-bin.tar.gz"/>
+		<untar src="${bin.dir}/ffmpeg-2.1.3-bin.tar" dest="${bin.dir}"/>
+		<delete file="${bin.dir}/ffmpeg-2.1.3-bin.tar" />
+		<chmod file="${bin.dir}/ffmpeg-2.1.3-bin/ffmpeg" perm="700"/>
+		<chmod file="${bin.dir}/ffmpeg-2.1.3-bin/ffprobe" perm="700"/>
+		<chmod file="${bin.dir}/ffmpeg-2.1.3-bin/ffmpeg-2.1.3.sh" perm="700"/>
+		<chmod file="${bin.dir}/ffmpeg-2.1.3-bin/ffprobe-2.1.3.sh" perm="700"/>
+		<symlink link="${bin.dir}/ffmpeg" resource="${bin.dir}/ffmpeg-2.1.3-bin/ffmpeg-2.1.3.sh"/>
+		<symlink link="${bin.dir}/ffprobe" resource="${bin.dir}/ffmpeg-2.1.3-bin/ffprobe-2.1.3.sh"/>
+	</target>
+
+	<target name="download-vast-client-js">
+		<delete dir="${basedir}/vast-client-js" />
+		<exec dir="${basedir}" executable="git" failonerror="true">
+			<arg value="clone" />
+			<arg value="-b" />
+            <arg value="${version}" />		
+			<arg value="https://github.com/kaltura/vast-client-js" />
+		</exec>
+		<copy todir="${basedir}/vendor/vast-client-js" overwrite="true" failonerror="true">
+			<fileset dir="${basedir}/vast-client-js/src"/>
+		</copy>
+		<delete dir="${basedir}/vast-client-js" />
+	</target>
+
+	<target name="build-id3lib">
+		<exec dir="${native.dir}/vendor/id3lib-3.8.3" executable="./configure" failonerror="true" />
+		<exec dir="${native.dir}/vendor/id3lib-3.8.3" executable="make" failonerror="true" />
+	</target>
+
+	<target name="build-TsId3Reader-plugin">
+		<exec dir="${native.dir}/node_addons/TsId3Reader" executable="node-gyp" failonerror="true">
+			<arg value="configure" />
+			<arg value="build" />
+		</exec>
+	</target>
+
+	<target name="build-TsPreparer-plugin">
+		<exec dir="${native.dir}/node_addons/TsPreparer" executable="node-gyp" failonerror="true">
+			<arg value="configure" />
+			<arg value="build" />
+		</exec>
+	</target>
+
+	<target name="build-TsStitcher-plugin">
+		<exec dir="${native.dir}/node_addons/TsStitcher" executable="node-gyp" failonerror="true">
+			<arg value="configure" />
+			<arg value="build" />
+		</exec>
+	</target>
+
+	<target name="install-id3lib" depends="build-id3lib">
+		<exec dir="${native.dir}/vendor/id3lib-3.8.3" executable="make" failonerror="true">
+			<arg value="install" />
+		</exec>
+		<exec executable="ldconfig" failonerror="true" />
+	</target>
+
+	<target name="install-TsId3Reader-plugin" depends="install-id3lib, build-TsId3Reader-plugin">
+	</target>
+
+	
+	<target name="play-server-service" depends="copy-template-files">
+		<symlink link="/etc/init.d/kaltura_play" resource="${bin.dir}/play-server.sh" failonerror="true" overwrite="true"/>
+		<chmod file="${bin.dir}/play-server.sh" perm="700"/>
+	</target>
+	
+	<target name="copy-template-files">
+		<copy file="${basedir}/config/config.ini.template" tofile="${basedir}/config/config.ini" failonerror="true" />
+		<copy file="${basedir}/config/managers.ini.template" tofile="${basedir}/config/managers.ini" failonerror="true" />
+		<copy file="${basedir}/bin/play-server.template.sh" tofile="${basedir}/bin/play-server.sh" failonerror="true" />
+	</target>
+
+	<target name="replace-Config-file-tokens" depends="copy-template-files">
+		<replace file="${basedir}/config/config.ini" value="@TOKEN_VALUE_NOT_FOUND@" propertyFile="${configFilePath}">
+                        <replacefilter token="@SERVICE_URL@" property="user_input.SERVICE_URL"/>
+                        <replacefilter token="@PLAY_PARTNER_ADMIN_SECRET@" property="user_input.PLAY_PARTNER_ADMIN_SECRET"/>
+                        <replacefilter token="@CLOUD_HOSTNAME@" property="user_input.CLOUD_HOSTNAME"/>
+                        <replacefilter token="@CLOUD_SECRET@" property="user_input.CLOUD_SECRET"/>
+                        <replacefilter token="@CLOUD_SHARED_BASE_PATH@" property="user_input.CLOUD_SHARED_BASE_PATH"/>
+                        <replacefilter token="@LOG_DIR@" property="user_input.LOG_DIR"/>
+                        <replacefilter token="@MEMCACHE_HOST@" property="user_input.MEMCACHE_HOST"/>
+                        <replacefilter token="@PLAY_SERVER_BASE_DIR@" property="user_input.PLAY_SERVER_BASE_DIR"/>
+                </replace>
+                <replace file="${basedir}/bin/play-server.sh" value="@TOKEN_VALUE_NOT_FOUND@" propertyFile="${configFilePath}">
+                        <replacefilter token="@LOG_DIR@" property="user_input.LOG_DIR"/>
+                        <replacefilter token="@PLAY_SERVER_BASE_DIR@" property="user_input.PLAY_SERVER_BASE_DIR"/>
+                </replace>
+	</target>
+
+</project>

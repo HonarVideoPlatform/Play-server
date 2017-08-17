@@ -1,0 +1,71 @@
+
+[client]
+serviceUrl = @SERVICE_URL@
+partnerId = -6
+secret = @PLAY_PARTNER_ADMIN_SECRET@
+timeout = 90
+verifySSL = false
+
+[cloud]
+domain = @CLOUD_HOSTNAME@
+httpPort = 80
+;httpsPort = 443
+secret = @CLOUD_SECRET@
+sharedBasePath = @CLOUD_SHARED_BASE_PATH@
+requestTimeout = 40
+segmentsHistoryLimit = 12
+;keyFilePath = @KEY_FILE_PATH@
+;certFilePath = @CERT_FILE_PATH@
+
+[logger]
+debugEnabled = 1
+logDir = @LOG_DIR@
+accessLogName = kaltura_play_access.log
+logName = kaltura_play.log
+errorLogName = kaltura_play_error.log
+largeDataDebugEnabled = 0
+
+[cache]
+hackWowzaUniqueSession = 0
+adMedia = 1800
+adMediaExtension = 1800
+adHandled = 600
+cuePoint = 600
+uiConfConfig = 600
+
+entryHandled = 20
+cuePointWatcherHandled = 20
+entryRequired = 300
+masterManifest = 600
+renditionManifest = 20
+encodingParams = 600
+elapsedTime = 600
+blackHandled = 600
+blackMedia = 600
+restoreableAction = 600
+serverProcess = 60
+
+fileDownloadTimeout = 60
+
+[memcache]
+hostname = @MEMCACHE_HOST@
+port = 11211
+touchEnabled = 1
+; See all option in https://www.npmjs.org/package/memcached
+;maxKeySize = 250
+;maxExpiration = 2592000, the max expiration of keys by the Memcached server in milliseconds.
+maxValue = 1073741824
+;poolSize = 10, the maximum connections we can allocate in our connection pool.
+;algorithm = crc32, the hashing algorithm that should be used to generate the hashRing values.
+;reconnect =  18000000, when the server is marked as dead we will attempt to reconnect every x milliseconds.
+timeout = 300
+retries = 1
+failures = 1
+retry = 30000
+;remove = false, when the server is marked as dead you can remove it from the pool so all other will receive the keys instead.
+;failOverServers = undefined, the ability use these servers as failover when the dead server get's removed from the consistent hashing scheme. This must be an array of servers confirm the server_locations specification.
+;keyCompression = true, compress keys using md5 if they exceed the maxKeySize option.
+;idle = 5000, the idle timeout for the connections.
+
+[bin]
+binDir = @PLAY_SERVER_BASE_DIR@/bin

@@ -1,0 +1,43 @@
+
+[manifest]
+;domain = @MANIFEST_SERVICE_HOSTNAME@
+;domainPort = 80
+
+[stream]
+;useCdn = 1
+;latency should be > 40
+latency = 60
+;domain = @STREAM_SERVICE_HOSTNAME@
+; domainPort = 80
+
+[media]
+cdnCacheScope = public
+cdnMaxAge = 864000
+maxOutputStitchSegmentCalls = 1000
+;domain = @MEDIA_SERVICE_HOSTNAME@
+; domainPort = 80
+
+[ad]
+;domain = @AD_SERVICE_HOSTNAME@
+; domainPort = 80
+ffmpeg_max_processes=10
+
+[segment]
+;domain = @SEGMENT_SERVICE_HOSTNAME@
+; domainPort = 80
+
+[cuePoints]
+;domain = @CUE_POINTS_SERVICE_HOSTNAME@
+; domainPort = 80
+
+[adIntegration]
+vastRequestTimeOut = 5
+durationCoefficient = 1
+calcMd5OnRedirect = 0
+;domain = @AD_INTEGRATION_SERVICE_HOSTNAME@
+; domainPort = 80
+
+[system]
+
+[testAdServer]
+;vastUrls
